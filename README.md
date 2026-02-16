@@ -212,9 +212,3 @@ Authorization: Bearer <token>
 * Todos los IDs deben ser válidos de MongoDB (`ObjectId`).
 * Los usuarios **solo pueden editar o eliminar sus propias publicaciones y comentarios**.
 * Validaciones automáticas aseguran que campos obligatorios no estén vacíos y los formatos sean correctos.
-
----
-
-Si quieres, puedo hacer una **versión lista para importar directo en Postman (.json)** con **todas las rutas, headers y cuerpos prellenados**, así solo lo importas y pruebas todo con un clic.
-
-¿Quieres que haga esa versión lista para Postman?
