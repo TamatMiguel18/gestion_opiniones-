@@ -50,6 +50,7 @@ export const createUsuario = async (req, res) => {
         res.status(201).json({ success: true, message: 'Usuario creado', data: usuario });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error al crear usuario', error: error.message });
+        console.log(error);
     }
 };
 

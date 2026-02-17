@@ -14,37 +14,33 @@ import loginRoutes from '../src/login/login.routes.js';
 
 const BASE_URL = '/Opiniones/v1';
 
-// Middlewares
-const middlewares = (app) => {
-    app.use(express.urlencoded({ extended: false, limit: '10mb' }));
-    app.use(express.json({ limit: '10mb' }));
-    app.use(cors(corsOptions));
-    app.use(morgan('dev'));
-};
-
-// Integración de rutas
-const routes = (app) => {
-    app.use(`${BASE_URL}/usuarios`, usuariosRoutes);
-    app.use(`${BASE_URL}/opiniones`, opinionRoutes);
-    app.use(`${BASE_URL}/comentarios`, comentarioRoutes);
-    app.use(`${BASE_URL}/login`, loginRoutes);
-};
-
-// Inicializar servidor
-const initServer = async (app) => {
-    app = express();
+export const initServer = async () => {
+    const app = express();
     const PORT = process.env.PORT || 3001;
 
     try {
+        // Conectar a base de datos
         await dbConnection();
-        middlewares(app);
-        routes(app);
 
-        app.listen(PORT, () => {
-            console.log(`Servidor Opiniones | puerto ${PORT}`);
-            console.log(`Base URL : http://localhost:${PORT}${BASE_URL}`);
-        });
+        // ========================
+        // MIDDLEWARES
+        // ========================
+        app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+        app.use(express.json({ limit: '10mb' }));
+        app.use(cors(corsOptions));
+        app.use(morgan('dev'));
 
+        // ========================
+        // RUTAS
+        // ========================
+        app.use(`${BASE_URL}/usuarios`, usuariosRoutes);
+        app.use(`${BASE_URL}/opiniones`, opinionRoutes);
+        app.use(`${BASE_URL}/comentarios`, comentarioRoutes);
+        app.use(`${BASE_URL}/login`, loginRoutes);
+
+        // ========================
+        // HEALTH CHECK
+        // ========================
         app.get(`${BASE_URL}/health`, (req, res) => {
             res.status(200).json({
                 status: 'ok',
@@ -53,9 +49,15 @@ const initServer = async (app) => {
             });
         });
 
-    } catch (error) {
-        console.log(error);
-    }
-}
+        // ========================
+        // LEVANTAR SERVIDOR
+        // ========================
+        app.listen(PORT, () => {
+            console.log(`Servidor Opiniones | puerto ${PORT}`);
+            console.log(`Base URL : http://localhost:${PORT}${BASE_URL}`);
+        });
 
-export { initServer };
+    } catch (error) {
+        console.log('Error al iniciar servidor:', error);
+    }
+};
